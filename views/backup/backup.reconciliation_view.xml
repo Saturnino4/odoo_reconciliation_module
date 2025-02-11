@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree/List View -->
+        <record id="view_reconciliation_tree" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.tree</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_reconciliation_form" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.form</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"/>
+                        <button name="action_done" string="Done" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="amount"/>
+                            </group>
+                            <group>
+                                <field name="state"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_reconciliation_search" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.search</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Nome"/>
+                    <field name="amount" string="Quantia"/>
+                    <field name="date_end" string="Data do Fim"/>
+                    <field name="date_start" string="Data do Início"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_reconciliation" model="ir.actions.act_window">
+            <field name="name">Reconciliation</field>
+            <field name="res_model">reconciliation.reconciliation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_reconciliation_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a new record.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_reconciliation_root" 
+                  name="Reconciliação" 
+                  sequence="10"/>
+
+        <menuitem id="menu_reconciliation_main" 
+                  name="Reconciliações"
+                  parent="menu_reconciliation_root"
+                  action="action_reconciliation"
+                  sequence="1"/>
+    </data>
+</odoo>

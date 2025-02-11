@@ -1,0 +1,23 @@
+<odoo>
+    <template id="reconciliation_interface_template" name="Reconciliation Interface">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="o_form_view">
+                    <div class="o_form_sheet">
+                        <h1>Reconciliation Interface</h1>
+                        <div class="row">
+                            <div class="col-6">
+                                <h2>SWIFT Entries</h2>
+                                <!-- List SWIFT entries here -->
+                            </div>
+                            <div class="col-6">
+                                <h2>Accounts</h2>
+                                <!-- List Accounts here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

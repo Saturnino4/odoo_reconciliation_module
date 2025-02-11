@@ -1,0 +1,9 @@
+<odoo>
+  <template id="customize_web_header" inherit_id="web.webclient_bootstrap">
+    <xpath expr="//a[@class='oe_logo_text']" position="replace">
+      <a class="oe_logo_text" href="#">
+        <span>Reconciliação</span>
+      </a>
+    </xpath>
+  </template>
+</odoo>

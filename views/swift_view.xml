@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree/List View -->
+    <record id="view_swift_tree" model="ir.ui.view">
+        <field name="name">swift.swift.tree</field>
+        <field name="model">swift.swift</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="value"/>
+                <field name="date"/>
+                <field name="code"/>
+                <field name="entr"/>
+                <field name="reference"/>
+                <field name="amount"/>
+                <field name="ma"/>
+                <field name="status"/>
+                <field name="conta_id"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Search View -->
+    <!-- <record id="view_swift_search" model="ir.ui.view">
+        <field name="name">swift.swift.search</field>
+        <field name="model">swift.swift</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Pending" domain="[('status', '=', 'pending')]"/>
+                <filter string="Reconciled" domain="[('status', '=', 'reconciled')]"/>
+                <filter string="Ativo" domain="[('status', '=', 'ativo')]"/>
+                <filter string="Inativo" domain="[('status', '=', 'inativo')]"/>
+                <field name="status"/>
+            </search>
+        </field>
+    </record> -->
+
+
+    <!-- Form View with Action Buttons Instead -->
+    <record id="view_swift_form" model="ir.ui.view">
+        <field name="name">swift.swift.form</field>
+        <field name="model">swift.swift</field>
+        <field name="arch" type="xml">
+            <form string="SWIFT">
+                <header>
+                    <!-- <button name="action_inactive" string="Inactivate" type="object" 
+                            attrs="{'invisible': [('status', '=', 'inativo')]}" class="oe_highlight"/> -->
+                    <button name="action_active" string="Activate" type="object" 
+                            attrs="{'invisible': [('status', '=', 'ativo')]}" class="oe_highlight"/>
+                    <!-- <button name="action_show_html" string="Proximo" type="object" class="oe_highlight"/> -->
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="value"/>
+                        <field name="date"/>
+                        <field name="code"/>
+                        <field name="entr"/>
+                        <field name="reference"/>
+                        <field name="amount"/>
+                        <field name="ma"/>
+                        <field name="status"/>
+                        <field name="conta_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_swift_tree" model="ir.ui.view">
+        <field name="name">swift.swift.tree</field>
+        <field name="model">swift.swift</field>
+        <field name="arch" type="xml">
+            <tree string="SWIFT">
+                <field name="value"/>
+                <field name="date"/>
+                <field name="code"/>
+                <field name="entr"/>
+                <field name="reference"/>
+                <field name="amount"/>
+                <field name="ma"/>
+                <field name="status"/>
+                <field name="conta_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_swift" model="ir.actions.act_window">
+        <field name="name">SWIFT</field>
+        <field name="res_model">swift.swift</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_swift_tree"/>
+        <field name="context">{'create': True}</field>
+
+        <!-- Custom Button in Action Window -->
+            <!-- Additional Fields -->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first SWIFT entry
+            </p>
+        </field>
+        <!-- <field name="search_view_id" ref="view_swift_search"/> -->
+        <field name="limit">80</field>
+        <field name="domain">[]</field>
+        <!-- <field name="auto_search" eval="True"/> -->
+        <field name="target">current</field> <!-- Options: current, new, inline, fullscreen -->
+        <!-- <field name="flags">{'action_buttons': True}</field> -->
+
+    </record>
+
+
+    <!-- <record id="action_swift_custom_button" model="ir.actions.server">
+        <field name="name">Proximo</field>
+        <field name="model_id" ref="model_swift_swift"/>
+        <field name="binding_model_id" ref="model_swift_swift"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                'type': 'ir.actions.client',
+                'tag': 'display_html',
+                'params': {
+                    'content': '<h1>Custom HTML Content</h1>',
+                    'title': 'Custom HTML',
+                }
+            }
+        </field>
+    </record> -->
+
+
+
+    <!-- Menu Item -->
+    <menuitem id="menu_swift" name="SWIFT" parent="menu_reconciliation_root" action="action_swift"/>
+    
+</odoo>

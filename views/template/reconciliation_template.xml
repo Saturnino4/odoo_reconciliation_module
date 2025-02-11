@@ -1,0 +1,31 @@
+<odoo>
+    <template id="static_reconciliation_list" name="Static Reconciliation List">
+        <t t-call="web.html_container">
+            <div class="o_form_view">
+                <div class="o_form_sheet">
+                    <h1>Static Reconciliation List</h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date Start</th>
+                                <th>Date End</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>XPTO Bank Transfer</td>
+                                <td>2025-01-01</td>
+                                <td>2025-01-31</td>
+                                <td>1000.00</td>
+                                <td>Draft</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="reconciliation_sidebar" inherit_id="web.webclient_bootstrap">
+            <xpath expr="//div[@class='o_main_content']" position="before">
+                <aside class="o_sidebar">
+                    <div class="o_sidebar_section">
+                        <h3>Reconciliation Actions</h3>
+                        <ul>
+                            <li><a href="#">All Reconciliations</a></li>
+                            <li><a href="#">Drafts</a></li>
+                            <li><a href="#">Confirmed</a></li>
+                            <li><a href="#">Done</a></li>
+                        </ul>
+                    </div>
+                </aside>
+            </xpath>
+        </template>
+    </data>
+</odoo>

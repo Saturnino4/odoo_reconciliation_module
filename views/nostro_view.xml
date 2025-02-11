@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree/List View -->
+    <record id="view_nostro_tree" model="ir.ui.view">
+        <field name="name">account_nostro.account_nostro.tree</field>
+        <field name="model">account_nostro.account_nostro</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="account_number"/>
+                <field name="bank_name"/>
+                <field name="balance"/>
+                <field name="currency"/>
+                <field name="date"/>
+                <field name="state"/>
+                <field name="conta_id"/>
+            </tree>
+        </field>
+
+    </record> 
+
+    <!-- Form View -->
+    <record id="view_nostro_form" model="ir.ui.view">
+        <field name="name">account_nostro.account_nostro.form</field>
+        <field name="model">account_nostro.account_nostro</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_inactivate" string="Inactivate" type="object" 
+                            attrs="{'invisible': [('state', '=', 'inativo')]}" class="oe_highlight"/>
+                    <button name="action_activate" string="Activate" type="object" 
+                            attrs="{'invisible': [('state', '=', 'ativo')]}" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="reference"/>
+                            <field name="account_number"/>
+                            <field name="bank_name"/>
+                            <field name="balance"/>
+                            <field name="currency"/>
+                            <field name="date"/>
+                            <field name="conta_id"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+
+
+    </record>
+
+
+    <!-- Search View -->
+    <record id="view_nostro_search" model="ir.ui.view">
+        <field name="name">account_nostro.account_nostro.search</field>
+        <field name="model">account_nostro.account_nostro</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Nome"/>
+                <field name="reference" string="Referência"/>
+                <field name="account_number" string="Número de Conta"/>
+                <field name="bank_name" string="Nome do Banco"/>
+                <field name="balance" string="Saldo"/>
+                <field name="currency" string="Moeda"/>
+                <field name="date" string="Data"/>
+                <field name="conta_id" string="Conta"/>
+                <field name="state" string="Estado"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_nostro" model="ir.actions.act_window">
+        <field name="name">Nostro</field>
+        <field name="res_model">account_nostro.account_nostro</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_nostro_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a new record.
+            </p>
+            <button string="Create" class="btn-primary" name="%(action_nostro)d" type="action"/>
+            <p>
+                <a> Para mais informações, consulte a documentação do módulo Nostro. </a>
+            </p>
+            <div class="oe_button_box" name="button_box">
+                <button name="action_name" type="object" class="oe_stat_button" icon="fa-">
+                    <field name="field_name" string="" widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+
+    <!-- Menu -->
+    <menuitem id="menu_nostro"
+        name="Nostro" parent="menu_account"
+        action="action_nostro"
+    />
+
+    
+    
+
+</odoo>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree/List View -->
+        <record id="view_reconciliation_tree" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.tree</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="amount"/>
+                    <field name="write_date"/>
+                    <field name="create_date"/>
+                    <field name="write_uid"/>
+                    <!-- <field name="arch" type="xml">
+                        <xpath expr="//field[@name='write_date']" position="attributes">
+                            <attribute name="string">Última Atualização</attribute>
+                        </xpath>
+                        <xpath expr="//field[@name='create_date']" position="attributes">
+                            <attribute name="string">Data de Criação</attribute>
+                        </xpath>
+                        <xpath expr="//field[@name='write_uid']" position="attributes">
+                            <attribute name="string">Utilizador</attribute>
+                        </xpath>
+                    </field> -->
+
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Chart View -->
+        <record id="view_reconciliation_chart" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.chart</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <graph string="Reconciliation" type="bar">
+                    <field name="amount"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </graph>
+            </field>
+        </record>
+ 
+        <!-- Form View -->
+        <record id="view_reconciliation_form" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.form</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <!-- <button name="action_list_swift" string="Listar Swifts" type="object" class="btn-primary"  options='{"no_save": "true"}' /> -->
+                        <!-- <button style="background-color:#c2c2c2" name="action_reconcilie" string="Reconciliar"  options='{"no_save": "true"}'  type="object" class="btn-primary"/> -->
+                        <button name="action_reconcilie" string="Reconciliar" type="object" class="btn-primary" options='{"no_save": true}'/>
+                        <button name="action_confirm" string="Confirmar" type="object" class="oe_highlight"/>
+                        <button name="action_done" string="Done" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <!-- Novos campos para seleção de contas -->
+                                <field name="conta1_id" placeholder="Selecione uma conta"/>
+                                <field name="conta2_id" placeholder="Selecione a conta correspondete"/>
+                            </group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                                <field name="write_date" readonly="1"/>
+                                <field name="create_date" readonly="1"/>
+                                <field name="write_uid" readonly="1"/>
+                                <field name="amount"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <!-- Lista de Swift Transactions filtradas pela conta selecionada em conta1_id -->
+                            <page string="Swift Transactions">
+                                <field name="swift_ids">
+                                    <tree>
+                                        <field name="code"/>
+                                        <field name="reference"/>
+                                        <field name="value"/>
+                                        <field name="date"/>
+                                        <field name="ma"/>
+                                        <field name="amount"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                        <!-- </notebook>
+                        <notebook> -->
+                            <!-- Lista de Nostro Accounts filtrada pela conta selecionada em conta2_id -->
+                            <page string="Nostro Accounts">
+                                <field name="nostro_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="reference"/>
+                                        <field name="date"/>
+                                        <field name="account_number"/>
+                                        <field name="bank_name"/>
+                                        <field name="currency"/>
+                                        <field name="balance"/>
+                                        <!-- outros campos conforme o modelo account_nostro.account_nostro -->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_reconciliation_search" model="ir.ui.view">
+            <field name="name">reconciliation.reconciliation.search</field>
+            <field name="model">reconciliation.reconciliation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Nome"/>
+                    <field name="amount" string="Quantia"/>
+                    <field name="date_end" string="Data do Fim"/>
+                    <field name="date_start" string="Data do Início"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_reconciliation" model="ir.actions.act_window">
+            <field name="name">Reconciliation</field>
+            <field name="res_model">reconciliation.reconciliation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_reconciliation_form"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Vazio. Crie uma nova reconciliação.
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_reconciliation_see_all" model="ir.actions.act_window">
+            <field name="name">Reconciliation Chart</field>
+            <field name="res_model">reconciliation.reconciliation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_reconciliation_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Vazio. Crie uma nova reconciliação.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_reconciliation_chart" model="ir.actions.act_window">
+            <field name="name">Reconciliation Chart</field>
+            <field name="res_model">reconciliation.reconciliation</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_reconciliation_chart"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Vazio. Crie uma nova reconciliação.
+                </p>
+            </field>
+        </record>
+
+
+        <!-- Menu -->
+        <menuitem id="menu_reconciliation_root" name="Reconciliação" sequence="10"
+                web_icon="reconciliation,static/description/icon.png"
+        />
+        <menuitem id="menu_reconciliation_main" name="Reconciliações" parent="menu_reconciliation_root"
+                  action="action_reconciliation" sequence="1"/>
+        <menuitem id="menu_reconciliation_list" name="Listar" parent="menu_reconciliation_root"
+                  action="action_reconciliation_see_all" sequence="2"/>
+        <menuitem id="menu_reconciliation_chart" name="Grafico" parent="menu_reconciliation_root"
+                  action="action_reconciliation_chart" sequence="3"/>
+    </data>
+</odoo>
