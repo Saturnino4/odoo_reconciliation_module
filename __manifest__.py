@@ -21,6 +21,7 @@
         'views/components/reconciliation_template.xml',
         'views/nostro_view.xml',
         'views/wizards/reconciliation_wizards_view.xml',
+        'views/components/overrides.xml',
         # 'config/title.xml',
         # 'views/vostro_view.xml',
         # 'views/reconciliation_template.xml',

@@ -10,8 +10,29 @@
                             <field name="message" readonly="1"/>
                             <field name="conta1_id" readonly="1"/>
                             <field name="conta2_id" readonly="1"/>
-                            <!-- <field name="other_data" readonly="1"/> -->
                         </group>
+                        <notebook>
+                            <page string="Vostro Pendentes">
+                                <field name="pending_swift_ids" nolabel="1" mode="tree,form">
+                                    <tree editable="bottom">
+                                        <field name="reference"/>
+                                        <field name="amount"/>
+                                        <field name="date"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Nostro Pendentes">
+                                <field name="pending_nostro_ids" nolabel="1" mode="tree,form">
+                                    <tree editable="bottom">
+                                        <field name="reference"/>
+                                        <field name="balance"/>
+                                        <field name="date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                         <footer>
                             <button name="action_confirm_wizard" string="Confirmar" type="object" class="btn-primary"/>
                             <button string="Cancelar" class="btn-default" special="cancel"/>
@@ -21,5 +42,4 @@
             </field>
         </record>
     </data>
-
 </odoo>

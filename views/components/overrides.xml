@@ -1,0 +1,8 @@
+<odoo>
+    <data noupdate="1">
+        <record id="web_base_title_reconciliation" model="ir.config_parameter">
+            <field name="key">web.base.title</field>
+            <field name="value">Reconciliacao</field>
+        </record>
+    </data>
+</odoo>

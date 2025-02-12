@@ -9,16 +9,18 @@ class ReconciliationWizard(models.TransientModel):
     conta2_id = fields.Many2one("account.account", string="Conta 2")
     other_data = fields.Char(string="Dados Adicionais")
     reconciliation_id = fields.Many2one("reconciliation.reconciliation", string="Reconciliação", readonly=True)
-    
     pending_swift_ids = fields.Many2many(
         "swift.swift",
         string="Swifts Pendentes",
-        compute="_compute_pending_swift"
+        compute="_compute_pending_swift",
+        store=True
+
     )
     pending_nostro_ids = fields.Many2many(
         "account_nostro.account_nostro",
         string="Nostro Pendentes",
-        compute="_compute_pending_nostro"
+        compute="_compute_pending_nostro",
+        store=True
     )
 
     @api.model
@@ -27,31 +29,47 @@ class ReconciliationWizard(models.TransientModel):
         active_id = self.env.context.get('active_id')
         if active_id:
             rec = self.env['reconciliation.reconciliation'].browse(active_id)
-            res.update({
-                'reconciliation_id': rec.id,
-                'conta1_id': rec.conta1_id.id,
-                'conta2_id': rec.conta2_id.id,
-            })
-            # Força o recálculo dos campos computados:
-            wizard = self.browse([0])
-            wizard._compute_pending_swift()
-            wizard._compute_pending_nostro()
-
-            total_swift = sum(wizard.pending_swift_ids.mapped('amount'))
-            total_nostro = sum(wizard.reconciliation_id.nostro_ids.mapped('balance'))
-            resumo = (
-                f"Swift Pendentes: {len(wizard.pending_swift_ids)}\n"
-                f"Nostro Pendentes: {len(wizard.pending_nostro_ids)}\n"
-                f"Total Swift: {total_swift}\n"
-                f"Total Nostro: {total_nostro}\n"
-                f"Diferença: {total_swift - total_nostro if total_swift > total_nostro else total_nostro - total_swift}\n"                
+            
+            base_info = "Conta 1: {0}\nConta 2: {1}\nNome: {2}".format(
+                rec.conta1_id.name or 'N/D', rec.conta2_id.name or 'N/D', rec.name or 'Sem Nome'
             )
 
-            res['pending_swift_ids'] = wizard.pending_swift_ids.ids
-            res['pending_nostro_ids'] = wizard.pending_nostro_ids.ids
-            res['message'] = resumo
+            nostro_codes = [r.split(' ')[-1] for r in rec.nostro_ids.mapped('reference') if r]
+
+            swifts_pending = rec.swift_ids.filtered(
+                lambda s: s.reference and s.reference.split('.')[-1] not in nostro_codes
+            )
+
+            total_swift = sum(swifts_pending.mapped('amount'))
+            total_nostro = sum(rec.nostro_ids.mapped('balance'))
+
+            swift_refs = ", ".join(rec.swift_ids.mapped('reference'))
+            nostro_refs = ", ".join(rec.nostro_ids.mapped('reference'))
+            other_data = "Swifts: {0} | Nostro: {1}".format(swift_refs or 'Nenhum', nostro_refs or 'Nenhum')
+            diferenca = total_swift - total_nostro if total_swift > total_nostro else total_nostro - total_swift
+
+            resumo = (
+                f"{base_info}\n\n"
+                f"Detalhes de Swift:\n"
+                f" - Pendentes: {len(swifts_pending)}\n"
+                f" - Total Swift: {total_swift}\n\n"
+                f"Detalhes de Nostro:\n"
+                f" - Pendentes: {len(rec.nostro_ids)}\n"
+                f" - Total Nostro: {total_nostro}\n\n"
+                f"Dados Gerais: "
+                f"Pendencias total: {total_swift + total_nostro}\n"
+                f"Diferença entre os totais: {diferenca}\n"
+            )
+
+            res.update({
+                'message': resumo,
+                'conta1_id': rec.conta1_id.id,
+                'conta2_id': rec.conta2_id.id,
+                'other_data': other_data,
+                'reconciliation_id': rec.id,
+            })
         return res
-    
+
     def action_confirm_wizard(self):
         active_id = self.env.context.get('active_id')
         if active_id:

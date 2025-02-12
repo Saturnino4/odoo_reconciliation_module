@@ -10,7 +10,7 @@
                     <field name="name"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
-                    <field name="amount"/>
+                    <field name="day_offset"/>
                     <field name="write_date"/>
                     <field name="create_date"/>
                     <field name="write_uid"/>
@@ -37,7 +37,7 @@
             <field name="model">reconciliation.reconciliation</field>
             <field name="arch" type="xml">
                 <graph string="Reconciliation" type="bar">
-                    <field name="amount"/>
+                    <field name="day_offset"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
                 </graph>
@@ -73,7 +73,7 @@
                                 <field name="write_date" readonly="1"/>
                                 <field name="create_date" readonly="1"/>
                                 <field name="write_uid" readonly="1"/>
-                                <field name="amount"/>
+                                <field name="day_offset"/>
                             </group>
                         </group>
                         <notebook>
@@ -87,7 +87,6 @@
                                         <field name="date"/>
                                         <field name="ma"/>
                                         <field name="amount"/>
-
                                     </tree>
                                 </field>
                             </page>
@@ -122,7 +121,7 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="name" string="Nome"/>
-                    <field name="amount" string="Quantia"/>
+                    <field name="day_offset" string="Quantia"/>
                     <field name="date_end" string="Data do Fim"/>
                     <field name="date_start" string="Data do Início"/>
                 </search>
