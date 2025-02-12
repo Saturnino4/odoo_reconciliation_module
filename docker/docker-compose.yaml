@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:11
+    user: root
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres
+    ports:
+      - "5435:5432"
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  odoo13:
+    image: odoo:13
+    user: root
+    depends_on:
+      - db
+    ports:
+      - "10013:8069"
+      - "20013:8072"
+    tty: true
+    command: odoo --dev=all # Enable developer mode for hot-reload
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - ./custom_modules:/mnt/custom-addons:rw  # Your custom modules
+      - ./addons:/mnt/extra-addons:rw           # Default addons
+      - ./etc:/etc/odoo:rw                      # Odoo configuration file
+
+      - odoo-web-data2:/var/lib/odoo             # Persistent data [CORE]
+      # - ./filestore:/var/lib/odoo:rw            # Persistent filestore [EXTRA]
+    restart: always
+
+
+
+  # swift_watch:
+  #   build: ./service01
+  #   command: python server.py
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     - DB_HOST=db
+  #     - DB_PORT=5432
+  #     - DB_USER=odoo
+  #     - DB_PASSWORD=odoo
+  #     - DB_NAME=postgres
+  #   volumes:
+  #     - ./service01:/app
+  #   restart: always
+
+
+volumes:
+  pgdata:
+  odoo-web-data2:
+    
