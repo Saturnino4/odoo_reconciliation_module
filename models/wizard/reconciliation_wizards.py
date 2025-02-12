@@ -21,10 +21,10 @@ class ReconciliationWizard(models.TransientModel):
                 rec.conta1_id.name or 'N/D', rec.conta2_id.name or 'N/D', rec.name or 'Sem Nome'
             )
 
-            # Extrai os códigos de referência (último trecho) dos registros de nosso
+            # Extrai os códigos de referência (última parte) dos registros de nosso
             nostro_codes = [r.split(' ')[-1] for r in rec.nostro_ids.mapped('reference') if r]
 
-            # Filtra os swifts cujos códigos (último trecho de reference) não estão na lista de nosso_codes
+            # Identifica os swifts pendentes: cujo último segmento da referência não consta em nosso_codes
             swifts_pending = rec.swift_ids.filtered(
                 lambda s: s.reference and s.reference.split('.')[-1] not in nostro_codes
             )
@@ -39,15 +39,17 @@ class ReconciliationWizard(models.TransientModel):
 
             resumo = (
                 f"{base_info}\n\n"
-                f"Detalhes de Swift Pendentes:\n"
+                f"Detalhes de Swift:\n"
                 f" - Quantidade: {len(swifts_pending)}\n"
                 f" - Total Swift: {total_swift}\n\n"
-                f" - Nostro codes: {nostro_codes}\n\n"
-
-                f"Swift para reconciliação: {swift_refs}\n"
-
-                f"Total Nostro: {total_nostro}\n\n"
-                #f"Outros Dados: {other_data}"
+                f"Detalhes de Nostro:\n"
+                f" - Quantidade: {len(rec.nostro_ids)}\n"
+                f" - Total Nostro: {total_nostro}\n\n"
+                # f"Swift para reconciliação: {swift_refs}\n\n"
+                # f"Outros Dados: {other_data}"
+                f"Dados Gerais:"
+                f"Pendencias total: {total_swift + total_nostro}"
+                f"Diferença entre os totais: {total_swift - total_nostro}"
             )
 
             res.update({
@@ -73,13 +75,28 @@ class ReconciliationWizard(models.TransientModel):
                 lambda s: s.reference and s.reference.split('.')[-1] not in nostro_codes
             )
 
-            # Para os swifts que tiveram match, chama o método action_reconciled
+            # Processa os swifts:
             if matching_swifts:
                 matching_swifts.action_reconciled()
-            # Para os swifts sem match, chama o método action_pending
             if pending_swifts:
                 pending_swifts.action_pending()
 
-            self.env['reconciliation.reconciliation'].browse(active_id).action_confirm()
+            # Processa os nosso:
+            for nostro in rec.nostro_ids:
+                if nostro.reference:
+                    # Pega o código do nosso (última parte da referência separado por espaço)
+                    nostro_code = nostro.reference.split(' ')[-1]
+                    # Verifica se existe algum swift cujo último segmento da referência (separado por ponto)
+                    # corresponde ao código do nosso
+                    matching_swift = rec.swift_ids.filtered(
+                        lambda s: s.reference and s.reference.split('.')[-1] == nostro_code
+                    )
+                    if matching_swift:
+                        nostro.action_reconciled()
+                    else:
+                        nostro.action_pending()
+
+            # Confirma a reconciliação principal
+            rec.action_confirm()
 
         return {'type': 'ir.actions.act_window_close'}

@@ -43,8 +43,11 @@ class ReconciliationWizard(models.TransientModel):
                 f" - Quantidade: {len(swifts_pending)}\n"
                 f" - Total Swift: {total_swift}\n\n"
                 f" - Nostro codes: {nostro_codes}\n\n"
+
+                f"Swift para reconciliação: {swift_refs}\n"
+
                 f"Total Nostro: {total_nostro}\n\n"
-                f"Outros Dados: {other_data}"
+                #f"Outros Dados: {other_data}"
             )
 
             res.update({

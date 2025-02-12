@@ -54,8 +54,9 @@
                         <!-- <button name="action_list_swift" string="Listar Swifts" type="object" class="btn-primary"  options='{"no_save": "true"}' /> -->
                         <!-- <button style="background-color:#c2c2c2" name="action_reconcilie" string="Reconciliar"  options='{"no_save": "true"}'  type="object" class="btn-primary"/> -->
                         <button name="action_reconcilie" string="Reconciliar" type="object" class="btn-primary" options='{"no_save": true}'/>
-                        <button name="action_confirm" string="Confirmar" type="object" class="oe_highlight"/>
-                        <button name="action_done" string="Done" type="object" class="oe_highlight"/>
+                        <!-- <button name="action_confirm" string="Confirmar" type="object" class="oe_highlight"/> -->
+                        <!-- <button name="action_check" string="Checked" type="object" class="oe_highlight"/> -->
+
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -77,7 +78,7 @@
                         </group>
                         <notebook>
                             <!-- Lista de Swift Transactions filtradas pela conta selecionada em conta1_id -->
-                            <page string="Swift Transactions">
+                            <page string="Registro de Vostro">
                                 <field name="swift_ids">
                                     <tree>
                                         <field name="code"/>
@@ -93,7 +94,7 @@
                         <!-- </notebook>
                         <notebook> -->
                             <!-- Lista de Nostro Accounts filtrada pela conta selecionada em conta2_id -->
-                            <page string="Nostro Accounts">
+                            <page string="Registros de Nostro">
                                 <field name="nostro_ids">
                                     <tree>
                                         <field name="name"/>
