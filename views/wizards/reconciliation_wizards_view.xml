@@ -8,8 +8,8 @@
                     <sheet>
                         <group>
                             <field name="message" readonly="1"/>
-                            <field name="conta1_id" readonly="1"/>
-                            <field name="conta2_id" readonly="1"/>
+                            <field name="conta1_id" readonly="1" options="{'no_open': True}"/>
+                            <field name="conta2_id" readonly="1" options="{'no_open': True}"/>
                         </group>
                         <notebook>
                             <page string="Vostro Pendentes">

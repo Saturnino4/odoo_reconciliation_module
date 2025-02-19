@@ -18,6 +18,7 @@
         'views/reconciliation_view.xml',
         'views/account_view.xml',
         'views/swift_view.xml',
+        'views/nostro__swift_view.xml',
         'views/components/reconciliation_template.xml',
         'views/nostro_view.xml',
         'views/wizards/reconciliation_wizards_view.xml',

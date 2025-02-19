@@ -4,6 +4,7 @@ from . import (
     swift_model,
     nostro_model,
     wizard,
+    nostro__swift_model,
 )
 
 
