@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree/List View -->
+    <record id="view_movimento_nostro_tree" model="ir.ui.view">
+        <field name="name">movimento_nostro.movimento_nostro.tree</field>
+        <field name="model">movimento_nostro.movimento_nostro</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="documento"/>
+                <field name="data_emissao"/>
+                <field name="data_conta"/>
+                <field name="movimento"/>
+                <field name="saldo"/>
+                <field name="status"/>
+                <field name="conta_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_movimento_nostro_search" model="ir.ui.view">
+        <field name="name">movimento_nostro.movimento_nostro.search</field>
+        <field name="model">movimento_nostro.movimento_nostro</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="documento"/>
+                <field name="data_emissao"/>
+                <field name="status"/>
+                <filter string="Pendente" name="pending" domain="[('status', '=', 'pending')]"/>
+                <filter string="Reconciliado" name="reconciled" domain="[('status', '=', 'reconciled')]"/>
+                <filter string="Ativo" name="active" domain="[('status', '=', 'ativo')]"/>
+                <filter string="Inativo" name="inactive" domain="[('status', '=', 'inativo')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="Data Emissão" name="group_by_date" context="{'group_by': 'data_emissao'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Rest of your XML file remains unchanged -->
+    <!-- Form View with Action Buttons -->
+    <record id="view_movimento_nostro_form" model="ir.ui.view">
+        <field name="name">movimento_nostro.movimento_nostro.form</field>
+        <field name="model">movimento_nostro.movimento_nostro</field>
+        <field name="arch" type="xml">
+            <form string="Movimento Nostro">
+                <header>
+                    <button name="action_inactive" string="Inactivar" type="object" 
+                            attrs="{'invisible': [('status', '=', 'inativo')]}" class="oe_highlight"/>
+                    <button name="action_active" string="Activar" type="object" 
+                            attrs="{'invisible': [('status', '=', 'ativo')]}" class="oe_highlight"/>
+                    <button name="action_pending" string="Pendente" type="object"
+                            attrs="{'invisible': [('status', '=', 'pending')]}" class="oe_highlight"/>
+                    <button name="action_reconciled" string="Reconciliado" type="object"
+                            attrs="{'invisible': [('status', '=', 'reconciled')]}" class="oe_highlight"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="documento"/>
+                            <field name="data_emissao"/>
+                            <field name="data_conta"/>
+                        </group>
+                        <group>
+                            <field name="movimento"/>
+                            <field name="saldo"/>
+                            <field name="conta_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_movimento_nostro" model="ir.actions.act_window">
+        <field name="name">Movimento Nostro</field>
+        <field name="res_model">movimento_nostro.movimento_nostro</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_movimento_nostro_tree"/>
+        <field name="search_view_id" ref="view_movimento_nostro_search"/>
+        <field name="context">{'create': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Criar o seu primeiro movimento nostro
+            </p>
+        </field>
+        <field name="limit">80</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_movimento_nostro" 
+              name="Movimento Nostro" 
+              parent="menu_reconciliation_root" 
+              action="action_movimento_nostro"
+              sequence="20"/>
+    
+</odoo>
+

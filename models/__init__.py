@@ -5,6 +5,7 @@ from . import (
     nostro_model,
     wizard,
     nostro__swift_model,
+    movimento_nostro_model
 )
 
 

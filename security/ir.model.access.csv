@@ -1,6 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_reconciliation_user,reconciliation.reconciliation.user,model_reconciliation_reconciliation,base.group_user,1,1,1,1
-ccess_account_user,account.account.user,model_account_account,base.group_user,1,1,1,1
+access_account_user,account.account.user,model_account_account,base.group_user,1,1,1,1
 access_swift_user,swift_swift_user,model_swift_swift,base.group_user,1,1,1,1
 access_account_nostro,account_nostro_account_nostro,model_account_nostro_account_nostro,base.group_user,1,1,1,1
 access_nostro_swift_user,nostro.swift.user,model_nostro_swift,base.group_user,1,1,1,1
+access_movimento_nostro_user,movimento_nostro.movimento_nostro.user,model_movimento_nostro_movimento_nostro,base.group_user,1,1,1,1
