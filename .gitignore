@@ -1,1 +1,4 @@
 backup/*
+__pycache__/*
+*.pyc
+*BKP.*

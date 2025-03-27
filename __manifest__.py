@@ -24,6 +24,7 @@
         'views/wizards/reconciliation_wizards_view.xml',
         'views/components/overrides.xml',
         'views/movimento_nostro_view.xml',
+        # 'views/movimento_vostro_view.xml',
         # 'config/title.xml',
         # 'views/vostro_view.xml',
         # 'views/reconciliation_template.xml',
