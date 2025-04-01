@@ -42,7 +42,7 @@
         <field name="name">movimento_vostro.movimento_vostro.form</field>
         <field name="model">movimento_vostro.movimento_vostro</field>
         <field name="arch" type="xml">
-            <form string="Vostro">
+            <form string="Movimento Vostro">
                 <header>
                     <!-- <button name="action_inactive" string="Inactivate" type="object" 
                             attrs="{'invisible': [('status', '=', 'inativo')]}" class="oe_highlight"/> -->
@@ -73,7 +73,7 @@
         <field name="name">movimento_vostro.movimento_vostro.tree</field>
         <field name="model">movimento_vostro.movimento_vostro</field>
         <field name="arch" type="xml">
-            <tree string="Vostro">
+            <tree string="Movimento Vostro">
                 <field name="value"/>
                 <field name="date"/>
                 <field name="code"/>
@@ -89,7 +89,7 @@
 
     <!-- Action -->
     <record id="action_movimento_vostro" model="ir.actions.act_window">
-        <field name="name">Vostro</field>
+        <field name="name">Movimentos Vostro</field>
         <field name="res_model">movimento_vostro.movimento_vostro</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_movimento_vostro_tree"/>

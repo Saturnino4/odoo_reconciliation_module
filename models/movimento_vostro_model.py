@@ -5,7 +5,7 @@ class MovimentoVostro(models.Model):
     _name = 'movimento_vostro.movimento_vostro'
     _description = 'Movimentos da conta vostro'
 
-    value = fields.Float(string='Valor', required=False)
+    value = fields.Char(string='Valor', required=False)
     date = fields.Date(string='Data', required=False)
     code = fields.Char(string='Código', required=False)
     entr = fields.Char(string='Entrada', required=False)
@@ -17,7 +17,7 @@ class MovimentoVostro(models.Model):
         ('inativo', 'Inativo'),
         ('pending', 'Pendente'),
         ('reconciled', 'Reconciliado')
-    ], string='Estado', default='ativo', required=False)
+    ], string='Estado', default='pending', required=False)
     conta_id = fields.Many2one('account.account', string='Conta', required=False)
 
     def action_inactive(self):

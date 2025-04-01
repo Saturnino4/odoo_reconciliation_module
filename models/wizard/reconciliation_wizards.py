@@ -71,10 +71,14 @@ class ReconciliationWizard(models.TransientModel):
             total_nostro = sum(nostro_ids.mapped('saldo'))
             
             resumo = (
-                f"Swift Pendentes: {len(pending_swifts)}\n"
-                f"Nostro Pendentes: {len(pending_nostro)}\n"
-                f"Total Swift: {total_swift}\n"
-                f"Total Nostro: {total_nostro}\n"
+                f"Vostro:\n"
+                f"\t - Pendentes: {len(pending_swifts)}\n"
+                f"\t - Reconciliado: {len(reconciled_swifts)}\n"
+                f"\t - Saldo: {abs(total_swift):.2f}\n"
+                f"Nostro:\n"
+                f"\t - Pendentes: {len(pending_nostro)}\n"
+                f"\t - Reconciliado: {'...'}\n"
+                f"\t - Saldo: {abs(total_nostro):.2f}\n"
                 f"Diferença: {abs(total_swift - total_nostro):.2f}\n"            
             )
             
@@ -122,8 +126,8 @@ class ReconciliationWizard(models.TransientModel):
             # Update the reconciliation record
             self.reconciliation_id.write({
                 'state': 'confirmed',
-                'confirmation_date': fields.Date.today(),
-                'confirmed_by': self.env.user.id,
+                'write_date': fields.Date.today(),
+                'write_uid': self.env.user.id,
             })
             
             # Get nostro codes (direct references)

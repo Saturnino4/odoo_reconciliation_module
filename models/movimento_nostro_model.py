@@ -19,7 +19,7 @@ class MovimentoNostro(models.Model):
         ('inativo', 'Inativo'),
         ('pending', 'Pendente'), 
         ('reconciled', 'Reconciliado')
-    ], string='Estado', default='ativo', required=False)
+    ], string='Estado', default='pending', required=False)
 
     def action_inactive(self):
         self.write({'status': 'inativo'})
