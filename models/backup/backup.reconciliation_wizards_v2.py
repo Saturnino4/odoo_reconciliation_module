@@ -21,12 +21,6 @@ class ReconciliationWizard(models.TransientModel):
         compute="_compute_pending_nostro"
     )
 
-    def _extract_vostro_reference(self, reference):
-        """Extract the actual reference number from vostro reference"""
-        if not reference:
-            return ""
-        return reference.split(' ')[-1]
-    
     @api.model
     def default_get(self, fields_list):
         res = super(ReconciliationWizard, self).default_get(fields_list)
@@ -43,39 +37,32 @@ class ReconciliationWizard(models.TransientModel):
             nostro_ids = rec.nostro_ids
             swift_ids = rec.swift_ids
             
-            # Get nostro codes (direct reference)
-            nostro_codes = nostro_ids.mapped('reference')
-
-            reconciled_swifts = swift_ids.filtered(
-                lambda s: self._extract_vostro_reference(s.reference) in nostro_codes
-            )
-            # Filter swift records that don't match any nostro code
+            # Prepare data for pending calculations
+            nostro_codes = [r.split(' ')[-1] for r in nostro_ids.mapped('reference') if r]
             pending_swifts = swift_ids.filtered(
-                lambda s: self._extract_vostro_reference(s.reference) not in nostro_codes
+                lambda s: s.reference and s.reference.split('.')[-1] not in nostro_codes
             )
             
             pending_nostro = self.env['movimento_nostro.movimento_nostro']
             for nost in nostro_ids:
                 if nost.reference:
-                    # Find swifts with matching extracted reference
+                    nostro_code = nost.reference.split(' ')[-1]
                     matching_swift = swift_ids.filtered(
-                        lambda s: self._extract_vostro_reference(s.reference) == nost.reference
+                        lambda s: s.reference and s.reference.split('.')[-1] == nostro_code
                     )
                     if not matching_swift:
                         pending_nostro |= nost
             
             # Calculate totals using correct field names
-            total_swift_reconciled = sum(reconciled_swifts.mapped('amount'))
-            total_swift_pending = sum(pending_swifts.mapped('amount'))
-            total_swift = total_swift_reconciled + total_swift_pending
-            total_nostro = sum(nostro_ids.mapped('saldo'))
+            total_swift = sum(pending_swifts.mapped('amount'))
+            total_nostro = sum(nostro_ids.mapped('saldo'))  # Changed from 'balance' to 'saldo'
             
             resumo = (
                 f"Swift Pendentes: {len(pending_swifts)}\n"
                 f"Nostro Pendentes: {len(pending_nostro)}\n"
                 f"Total Swift: {total_swift}\n"
                 f"Total Nostro: {total_nostro}\n"
-                f"Diferença: {abs(total_swift - total_nostro):.2f}\n"            
+                f"Diferença: {abs(total_swift - total_nostro)}\n"                
             )
             
             # Store IDs for the many2many fields
@@ -88,13 +75,46 @@ class ReconciliationWizard(models.TransientModel):
             
         return res
     
+    def action_confirm_wizard(self):
+        active_id = self.env.context.get('active_id')
+        if active_id:
+            rec = self.env['reconciliation.reconciliation'].browse(active_id)
+            nostro_codes = [r.split(' ')[-1] for r in rec.nostro_ids.mapped('reference') if r]
+
+            matching_swifts = rec.swift_ids.filtered(
+                lambda s: s.reference and s.reference.split('.')[-1] in nostro_codes
+            )
+            pending_swifts = rec.swift_ids.filtered(
+                lambda s: s.reference and s.reference.split('.')[-1] not in nostro_codes
+            )
+
+            if matching_swifts:
+                matching_swifts.action_reconciled()
+            if pending_swifts:
+                pending_swifts.action_pending()
+
+            for nostro in rec.nostro_ids:
+                if nostro.reference:
+                    nostro_code = nostro.reference.split(' ')[-1]
+                    matching_swift = rec.swift_ids.filtered(
+                        lambda s: s.reference and s.reference.split('.')[-1] == nostro_code
+                    )
+                    if matching_swift:
+                        nostro.action_reconciled()
+                    else:
+                        nostro.action_pending()
+
+            rec.action_confirm()
+
+        return {'type': 'ir.actions.act_window_close'}
+    
     @api.depends('reconciliation_id', 'reconciliation_id.nostro_ids.reference', 'reconciliation_id.swift_ids.reference')
     def _compute_pending_swift(self):
         for wiz in self:
             if wiz.reconciliation_id:
-                nostro_codes = wiz.reconciliation_id.nostro_ids.mapped('reference')
+                nostro_codes = [r.split(' ')[-1] for r in wiz.reconciliation_id.nostro_ids.mapped('reference') if r]
                 wiz.pending_swift_ids = wiz.reconciliation_id.swift_ids.filtered(
-                    lambda s: self._extract_vostro_reference(s.reference) not in nostro_codes
+                    lambda s: s.reference and s.reference.split('.')[-1] not in nostro_codes
                 )
             else:
                 wiz.pending_swift_ids = self.env['movimento_vostro.movimento_vostro']
@@ -106,55 +126,12 @@ class ReconciliationWizard(models.TransientModel):
                 pending = self.env['movimento_nostro.movimento_nostro']
                 for nost in wiz.reconciliation_id.nostro_ids:
                     if nost.reference:
+                        nostro_code = nost.reference.split(' ')[-1]
                         matching_swift = wiz.reconciliation_id.swift_ids.filtered(
-                            lambda s: self._extract_vostro_reference(s.reference) == nost.reference
+                            lambda s: s.reference and s.reference.split('.')[-1] == nostro_code
                         )
                         if not matching_swift:
                             pending |= nost
                 wiz.pending_nostro_ids = pending
             else:
                 wiz.pending_nostro_ids = self.env['movimento_nostro.movimento_nostro']
-    
-    def action_confirm_wizard(self):
-        """Confirm the reconciliation based on the wizard data"""
-        self.ensure_one()
-        if self.reconciliation_id:
-            # Update the reconciliation record
-            self.reconciliation_id.write({
-                'state': 'confirmed',
-                'confirmation_date': fields.Date.today(),
-                'confirmed_by': self.env.user.id,
-            })
-            
-            # Get nostro codes (direct references)
-            nostro_codes = self.reconciliation_id.nostro_ids.mapped('reference')
-            
-            # Find matching swifts by comparing extracted references
-            matching_swifts = self.reconciliation_id.swift_ids.filtered(
-                lambda s: self._extract_vostro_reference(s.reference) in nostro_codes
-            )
-            
-            # Update status of matched records
-            matching_swifts.write({'status': 'reconciled'})
-            
-            # Find matching nostro records and update them
-            for swift in matching_swifts:
-                extracted_ref = self._extract_vostro_reference(swift.reference)
-                matching_nostro = self.reconciliation_id.nostro_ids.filtered(
-                    lambda n: n.reference == extracted_ref
-                )
-                if matching_nostro:
-                    matching_nostro.write({'status': 'reconciled'})
-            
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': 'Reconciliação Confirmada',
-                    'message': 'Os registros foram reconciliados com sucesso.',
-                    'sticky': False,
-                    'type': 'success',
-                }
-            }
-        
-        return {'type': 'ir.actions.act_window_close'}

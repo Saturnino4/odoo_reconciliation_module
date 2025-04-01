@@ -13,8 +13,8 @@
                         </group>
                         <notebook>
                             <page string="Vostro Pendentes">
-                                <field name="pending_swift_ids" nolabel="1" mode="tree,form">
-                                    <tree editable="bottom">
+                                <field name="pending_swift_ids" nolabel="1" mode="tree,form" readonly="1">
+                                    <tree>
                                         <field name="reference"/>
                                         <field name="amount"/>
                                         <field name="date"/>
@@ -23,12 +23,12 @@
                                 </field>
                             </page>
                             <page string="Nostro Pendentes">
-                                <field name="pending_nostro_ids" nolabel="1" mode="tree,form">
-                                    <tree editable="bottom">
+                                <field name="pending_nostro_ids" nolabel="1" mode="tree,form" readonly="1">
+                                    <tree>
                                         <field name="reference"/>
-                                        <field name="balance"/>
-                                        <field name="date"/>
-                                        <field name="state"/>
+                                        <field name="saldo"/>
+                                        <field name="data_conta"/>
+                                        <field name="status"/>
                                     </tree>
                                 </field>
                             </page>
@@ -43,3 +43,4 @@
         </record>
     </data>
 </odoo>
+

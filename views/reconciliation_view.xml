@@ -95,7 +95,7 @@
                             <!-- Lista de Nostro Accounts filtrada pela conta selecionada em conta2_id -->
                             <page string="Registros de Nostro">
                                 <field name="nostro_ids">
-                                    <tree>
+                                    <!-- <tree>
                                         <field name="name"/>
                                         <field name="reference"/>
                                         <field name="date"/>
@@ -103,6 +103,14 @@
                                         <field name="bank_name"/>
                                         <field name="currency"/>
                                         <field name="balance"/>
+                                    </tree> -->
+                                    <tree>
+                                        <field name="documento"/>
+                                        <field name="data_conta"/>
+                                        <field name="reference"/>
+                                        <field name="conta_id"/>
+                                        <field name="saldo"/>
+                                        <field name="status"/>
                                         <!-- outros campos conforme o modelo account_nostro.account_nostro -->
                                     </tree>
                                 </field>

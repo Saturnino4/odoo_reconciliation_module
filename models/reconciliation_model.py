@@ -21,13 +21,14 @@ class Reconciliation(models.Model):
     conta2_id = fields.Many2one('account.account', string="Conta 2")
 
     swift_ids = fields.One2many(
-        'swift.swift', 
+        'movimento_vostro.movimento_vostro', 
         string='Swift Transactions', 
         compute='_compute_swift_ids', 
         readonly=True
     )
     nostro_ids = fields.One2many(
-        'account_nostro.account_nostro', 
+        # 'account_nostro.account_nostro', 
+        'movimento_nostro.movimento_nostro', 
         string='Nostro Accounts', 
         compute='_compute_nostro_ids', 
         readonly=True
@@ -73,48 +74,30 @@ class Reconciliation(models.Model):
 
 
 
-    @api.depends('conta1_id', 'date_start', 'date_end', 'day_offset')
+
+    @api.depends('conta1_id', 'date_start', 'date_end')
     def _compute_swift_ids(self):
         for rec in self:
             if rec.conta1_id and rec.date_start and rec.date_end:
-                effective_date_start = fields.Date.from_string(rec.date_start) - timedelta(days=rec.day_offset)
-                rec.swift_ids = self.env['swift.swift'].search([
+                rec.swift_ids = self.env['movimento_vostro.movimento_vostro'].search([
                     ('conta_id', '=', rec.conta1_id.id),
-                    ('date', '>=', effective_date_start),
+                    ('date', '>=', rec.date_start),
                     ('date', '<=', rec.date_end)
                 ])
             else:
-                rec.swift_ids = self.env['swift.swift']
+                rec.swift_ids = self.env['movimento_vostro.movimento_vostro']
 
-    @api.depends('conta2_id', 'date_start', 'date_end', 'day_offset')
+    @api.depends('conta2_id', 'date_start', 'date_end')
     def _compute_nostro_ids(self):
         for rec in self:
             if rec.conta2_id and rec.date_start and rec.date_end:
-                effective_date_start = fields.Date.from_string(rec.date_start) - timedelta(days=rec.day_offset)
-                rec.nostro_ids = self.env['account_nostro.account_nostro'].search([
+                rec.nostro_ids = self.env['movimento_nostro.movimento_nostro'].search([
                     ('conta_id', '=', rec.conta2_id.id),
-                    ('date', '>=', effective_date_start),
-                    ('date', '<=', rec.date_end)
+                    ('data_conta', '>=', rec.date_start),
+                    ('data_conta', '<=', rec.date_end)
                 ])
             else:
-                rec.nostro_ids = self.env['account_nostro.account_nostro']
-
-
-
-
-    # @api.depends('conta1_id', 'date_start', 'date_end')
-    # def _compute_swift_ids(self):
-    #     for rec in self:
-    #         if rec.conta1_id and rec.date_start and rec.date_end:
-    #             rec.swift_ids = self.env['swift.swift'].search([
-    #                 ('conta_id', '=', rec.conta1_id.id),
-    #                 ('date', '>=', rec.date_start),
-    #                 ('date', '<=', rec.date_end)
-    #             ])
-    #         else:
-    #             rec.swift_ids = self.env['swift.swift']
-
-    # @api.depends('conta2_id', 'date_start', 'date_end')
+                rec.nostro_ids = self.env['movimento_nostro.movimento_nostro']
     # def _compute_nostro_ids(self):
     #     for rec in self:
     #         if rec.conta2_id and rec.date_start and rec.date_end:
@@ -122,6 +105,38 @@ class Reconciliation(models.Model):
     #                 ('conta_id', '=', rec.conta2_id.id),
     #                 ('date', '>=', rec.date_start),
     #                 ('date', '<=', rec.date_end)
+    #             ])
+    #         else:
+    #             rec.nostro_ids = self.env['account_nostro.account_nostro']
+
+
+
+
+
+
+
+    # @api.depends('conta1_id', 'date_start', 'date_end', 'day_offset')
+    # def _compute_swift_ids(self):
+    #     for rec in self:
+    #         if rec.conta1_id and rec.date_start and rec.date_end:
+    #             effective_date_start = fields.Date.from_string(rec.date_start) - timedelta(days=rec.day_offset)
+    #             rec.swift_ids = self.env['movimento_vostro.movimento_vostro'].search([
+    #                 ('conta_id', '=', rec.conta1_id.id),
+    #                 ('date', '>=', effective_date_start),
+    #                 ('date', '<=', rec.date_end)
+    #             ])
+    #         else:
+    #             rec.swift_ids = self.env['movimento_vostro.movimento_vostro']
+
+    # @api.depends('conta2_id', 'date_start', 'date_end', 'day_offset')
+    # def _compute_nostro_ids(self):
+    #     for rec in self:
+    #         if rec.conta2_id and rec.date_start and rec.date_end:
+    #             effective_date_start = fields.Date.from_string(rec.date_start) - timedelta(days=rec.day_offset)
+    #             rec.nostro_ids = self.env['account_nostro.account_nostro'].search([
+    #                 ('conta_id', '=', rec.conta2_id.id),
+    #                 ('date_conta', '>=', effective_date_start),
+    #                 ('date_conta', '<=', rec.date_end)
     #             ])
     #         else:
     #             rec.nostro_ids = self.env['account_nostro.account_nostro']
