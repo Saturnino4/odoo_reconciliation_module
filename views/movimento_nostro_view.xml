@@ -7,14 +7,15 @@
         <field name="model">movimento_nostro.movimento_nostro</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="conta_id"/>
                 <field name="documento"/>
                 <field name="data_emissao"/>
                 <field name="data_conta"/>
                 <field name="reference"/>
                 <field name="movimento"/>
+                <field name="movimento_vostro_id"/>
                 <field name="saldo"/>
                 <field name="status"/>
-                <field name="conta_id"/>
             </tree>
         </field>
     </record>
@@ -26,7 +27,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="documento"/>
-                <field name="data_emissao"/>
+                <field name="data_emissao"/> 
                 <field name="status"/>
                 <filter string="Pendente" name="pending" domain="[('status', '=', 'pending')]"/>
                 <filter string="Reconciliado" name="reconciled" domain="[('status', '=', 'reconciled')]"/>
@@ -40,7 +41,6 @@
         </field>
     </record>
 
-    <!-- Rest of your XML file remains unchanged -->
     <!-- Form View with Action Buttons -->
     <record id="view_movimento_nostro_form" model="ir.ui.view">
         <field name="name">movimento_nostro.movimento_nostro.form</field>
@@ -61,15 +61,16 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="conta_id"/>
                             <field name="documento"/>
                             <field name="reference"/>
                             <field name="data_emissao"/>
                             <field name="data_conta"/>
                         </group>
                         <group>
+                            <field name="movimento_vostro_id"/>
                             <field name="movimento"/>
                             <field name="saldo"/>
-                            <field name="conta_id"/>
                         </group>
                     </group>
                 </sheet>
@@ -79,7 +80,7 @@
 
     <!-- Action -->
     <record id="action_movimento_nostro" model="ir.actions.act_window">
-        <field name="name">Movimento Nostro</field>
+        <field name="name">Movimentos Nostro</field>
         <field name="res_model">movimento_nostro.movimento_nostro</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_movimento_nostro_tree"/>
@@ -95,9 +96,14 @@
     </record>
 
     <!-- Menu Item -->
-    <menuitem id="menu_movimento_nostro" 
-              name="Movimento Nostro" 
+    <menuitem id="menu_movimentos" 
+              name="Movimentos" 
               parent="menu_reconciliation_root" 
+              sequence="20"/>
+
+    <menuitem id="menu_movimento_nostro" 
+              name="Nostros" 
+              parent="menu_movimentos" 
               action="action_movimento_nostro"
               sequence="20"/>
     

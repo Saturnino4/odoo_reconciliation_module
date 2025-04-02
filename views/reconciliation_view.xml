@@ -87,6 +87,7 @@
                                         <field name="date"/>
                                         <field name="ma"/>
                                         <field name="amount"/>
+                                        <field name="status"/>
                                     </tree>
                                 </field>
                             </page>
@@ -178,7 +179,7 @@
         <menuitem id="menu_reconciliation_root" name="Reconciliação" sequence="10"
                 web_icon="reconciliation,static/description/icon.png"
         />
-        <menuitem id="menu_reconciliation_main" name="Reconciliações" parent="menu_reconciliation_root"
+        <menuitem id="menu_reconciliation_main" name="Nova" parent="menu_reconciliation_root"
                   action="action_reconciliation" sequence="1"/>
         <menuitem id="menu_reconciliation_list" name="Listar" parent="menu_reconciliation_root"
                   action="action_reconciliation_see_all" sequence="2"/>

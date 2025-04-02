@@ -15,19 +15,20 @@
                             <page string="Vostro Pendentes">
                                 <field name="pending_swift_ids" nolabel="1" mode="tree,form" readonly="1">
                                     <tree>
+                                        <field name="date"/>
                                         <field name="reference"/>
                                         <field name="amount"/>
-                                        <field name="date"/>
+                                        <field name="ma"/>
                                         <field name="status"/>
                                     </tree>
                                 </field>
-                            </page>
+                            </page> 
                             <page string="Nostro Pendentes">
                                 <field name="pending_nostro_ids" nolabel="1" mode="tree,form" readonly="1">
                                     <tree>
+                                        <field name="data_conta"/>
                                         <field name="reference"/>
                                         <field name="saldo"/>
-                                        <field name="data_conta"/>
                                         <field name="status"/>
                                     </tree>
                                 </field>

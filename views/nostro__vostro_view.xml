@@ -1,0 +1,92 @@
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_nostro_vostro_tree" model="ir.ui.view">
+            <field name="name">nostro.vostro.tree</field>
+            <field name="model">nostro.vostro</field>
+            <field name="arch" type="xml">
+                <tree string="Nostro Vostro">
+                    <field name="nostro_account_id"/>
+                    <field name="vostro_account_id"/>
+                    <field name="description"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_nostro_vostro_form" model="ir.ui.view">
+            <field name="name">nostro.vostro.form</field>
+            <field name="model">nostro.vostro</field>
+            <field name="arch" type="xml">
+                <form string="Nostro Vostro">
+                    <!-- <header>
+                        <button name="reconcile_movements" string="Reconciliar" type="object" class="oe_highlight"/>
+                        <field name="status" widget="statusbar"/>
+                    </header> -->
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="nostro_account_id" options="{'no_create': True}"/>
+                                <field name="vostro_account_id" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Movimentos Nostro">
+                                <field name="movimento_nostro_ids" readonly="1">
+                                    <tree>
+                                        <field name="reference"/>
+                                        <field name="data_conta"/>
+                                        <field name="saldo"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Movimentos Vostro">
+                                <field name="movimento_vostro_ids" readonly="1">
+                                    <tree>
+                                        <field name="reference"/>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_nostro_vostro_search" model="ir.ui.view">
+            <field name="name">nostro.vostro.search</field>
+            <field name="model">nostro.vostro</field>
+            <field name="arch" type="xml">
+                <search string="Search Nostro Vostro">
+                    <field name="nostro_account_id"/>
+                    <field name="vostro_account_id"/>
+                    <field name="status"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_nostro_vostro" model="ir.actions.act_window">
+            <field name="name">Parametrização Nostro/Vostro</field>
+            <field name="res_model">nostro.vostro</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_nostro_vostro_tree"/>
+        </record>
+
+        <!-- Menu (opcional, se desejar disponibilizar a partir do menu) -->
+        <menuitem id="menu_nostro_vostro_root" 
+                  name="Parametrização" 
+                  parent="menu_reconciliation_root"
+                  action="action_nostro_vostro" 
+                  sequence="11" />
+    </data>
+</odoo>

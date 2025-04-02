@@ -7,34 +7,45 @@
         <field name="model">movimento_vostro.movimento_vostro</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="conta_id"/>
                 <field name="value"/>
                 <field name="date"/>
                 <field name="code"/>
                 <field name="entr"/>
                 <field name="reference"/>
+                <field name="movimento_nostro_id"/>
                 <field name="amount"/>
                 <field name="ma"/>
                 <field name="status"/>
-                <field name="conta_id"/>
             </tree>
         </field>
     </record>
 
 
     <!-- Search View -->
-    <!-- <record id="view_swift_search" model="ir.ui.view">
+    <record id="view_movimento_vostro_search" model="ir.ui.view">
         <field name="name">movimento_vostro.movimento_vostro.search</field>
         <field name="model">movimento_vostro.movimento_vostro</field>
         <field name="arch" type="xml">
             <search>
-                <filter string="Pending" domain="[('status', '=', 'pending')]"/>
-                <filter string="Reconciled" domain="[('status', '=', 'reconciled')]"/>
-                <filter string="Ativo" domain="[('status', '=', 'ativo')]"/>
-                <filter string="Inativo" domain="[('status', '=', 'inativo')]"/>
+                <field name="value"/>
+                <field name="reference"/>
+                <field name="date"/>
+                <field name="amount"/>
                 <field name="status"/>
+                <field name="conta_id"/>
+                <filter string="Pendente" name="pending" domain="[('status', '=', 'pending')]"/>
+                <filter string="Reconciliado" name="reconciled" domain="[('status', '=', 'reconciled')]"/>
+                <filter string="Ativo" name="active" domain="[('status', '=', 'ativo')]"/>
+                <filter string="Inativo" name="inactive" domain="[('status', '=', 'inativo')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="Data" name="group_by_date" context="{'group_by': 'date'}"/>
+                    <filter string="Conta" name="group_by_conta" context="{'group_by': 'conta_id'}"/>
+                </group>
             </search>
         </field>
-    </record> -->
+    </record>
 
 
     <!-- Form View with Action Buttons Instead -->
@@ -57,6 +68,7 @@
                         <field name="date"/>
                         <field name="code"/>
                         <field name="entr"/>
+                        <field name="movimento_nostro_id"/>
                         <field name="reference"/>
                         <field name="amount"/>
                         <field name="ma"/>
@@ -74,15 +86,18 @@
         <field name="model">movimento_vostro.movimento_vostro</field>
         <field name="arch" type="xml">
             <tree string="Movimento Vostro">
+                <field name="conta_id"/>
                 <field name="value"/>
                 <field name="date"/>
                 <field name="code"/>
                 <field name="entr"/>
+                <field name="movimento_nostro_id"/>
                 <field name="reference"/>
                 <field name="amount"/>
+                <field name="adjusted_amount" sum="Total"/>
+                <field name="movimento_nostro_id"/>
                 <field name="ma"/>
                 <field name="status"/>
-                <field name="conta_id"/>
             </tree>
         </field>
     </record>
@@ -134,8 +149,8 @@
     <!-- Menu Item -->
     <!-- <menuitem id="menu_movimento_vostro" name="Movimento Vostro" parent="menu_reconciliation_root" action="action_movimento_vostro"/> -->
     <menuitem id="menu_movimento_vostro" 
-              name="Movimentos Vostro" 
-              parent="menu_reconciliation_root" 
+              name="Vostros" 
+              parent="menu_movimentos" 
               action="action_movimento_vostro"
               sequence="21"/>
 </odoo>

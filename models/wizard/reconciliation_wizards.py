@@ -45,7 +45,7 @@ class ReconciliationWizard(models.TransientModel):
             
             # Get nostro codes (direct reference)
             nostro_codes = nostro_ids.mapped('reference')
-
+    
             reconciled_swifts = swift_ids.filtered(
                 lambda s: self._extract_vostro_reference(s.reference) in nostro_codes
             )
@@ -54,6 +54,8 @@ class ReconciliationWizard(models.TransientModel):
                 lambda s: self._extract_vostro_reference(s.reference) not in nostro_codes
             )
             
+            # Find reconciled nostro records
+            reconciled_nostro = self.env['movimento_nostro.movimento_nostro']
             pending_nostro = self.env['movimento_nostro.movimento_nostro']
             for nost in nostro_ids:
                 if nost.reference:
@@ -61,7 +63,9 @@ class ReconciliationWizard(models.TransientModel):
                     matching_swift = swift_ids.filtered(
                         lambda s: self._extract_vostro_reference(s.reference) == nost.reference
                     )
-                    if not matching_swift:
+                    if matching_swift:
+                        reconciled_nostro |= nost
+                    else:
                         pending_nostro |= nost
             
             # Calculate totals using correct field names
@@ -77,7 +81,7 @@ class ReconciliationWizard(models.TransientModel):
                 f"\t - Saldo: {abs(total_swift):.2f}\n"
                 f"Nostro:\n"
                 f"\t - Pendentes: {len(pending_nostro)}\n"
-                f"\t - Reconciliado: {'...'}\n"
+                f"\t - Reconciliado: {len(reconciled_nostro)}\n"
                 f"\t - Saldo: {abs(total_nostro):.2f}\n"
                 f"Diferença: {abs(total_swift - total_nostro):.2f}\n"            
             )
@@ -142,20 +146,32 @@ class ReconciliationWizard(models.TransientModel):
             matching_swifts.write({'status': 'reconciled'})
             
             # Find matching nostro records and update them
+            reconciled_count = 0
             for swift in matching_swifts:
                 extracted_ref = self._extract_vostro_reference(swift.reference)
                 matching_nostro = self.reconciliation_id.nostro_ids.filtered(
                     lambda n: n.reference == extracted_ref
                 )
                 if matching_nostro:
-                    matching_nostro.write({'status': 'reconciled'})
+                    # Update nostro status
+                    matching_nostro.write({
+                        'status': 'reconciled',
+                        'movimento_vostro_id': swift.id,  # Set reference to the vostro movement
+                    })
+                    
+                    # Update vostro with reference to nostro
+                    swift.write({
+                        'movimento_nostro_id': matching_nostro.id  # Set reference to the nostro movement
+                    })
+                    
+                    reconciled_count += 1
             
             return {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
                 'params': {
                     'title': 'Reconciliação Confirmada',
-                    'message': 'Os registros foram reconciliados com sucesso.',
+                    'message': f'{reconciled_count} registros foram reconciliados com sucesso.',
                     'sticky': False,
                     'type': 'success',
                 }

@@ -3,6 +3,6 @@ access_reconciliation_user,reconciliation.reconciliation.user,model_reconciliati
 access_account_user,account.account.user,model_account_account,base.group_user,1,1,1,1
 access_swift_user,swift_swift_user,model_swift_swift,base.group_user,1,1,1,1
 access_account_nostro,account_nostro_account_nostro,model_account_nostro_account_nostro,base.group_user,1,1,1,1
-access_nostro_swift_user,nostro.swift.user,model_nostro_swift,base.group_user,1,1,1,1
+access_nostro_vostro_user,nostro.vostro.user,model_nostro_vostro,base.group_user,1,1,1,1
 access_movimento_nostro_user,movimento_nostro.movimento_nostro.user,model_movimento_nostro_movimento_nostro,base.group_user,1,1,1,1
 access_movimento_vostro_user,movimento_vostro.movimento_vostro.user,model_movimento_vostro_movimento_vostro,base.group_user,1,1,1,1

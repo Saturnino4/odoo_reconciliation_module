@@ -79,11 +79,11 @@
               name="Contas"
               parent="menu_reconciliation_root"
               action="action_account"
-              sequence="3"/>
+              sequence="22"/>
 
-    <menuitem id="menu_account_list"
+    <!-- <menuitem id="menu_account_list"
               name="Extras"
               parent="menu_account"
               action="action_account"
-              sequence="4"/>
+              sequence="4"/> -->
 </odoo>

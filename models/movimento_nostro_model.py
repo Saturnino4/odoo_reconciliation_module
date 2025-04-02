@@ -4,7 +4,8 @@ import requests
 class MovimentoNostro(models.Model):
     _name = 'movimento_nostro.movimento_nostro'
     _description = 'Movimentos da conta nostra'
- 
+    _rec_name = 'movimento'
+
     name = fields.Char(string='Nome', required=False)
     reference = fields.Char(string='Referência', required=True)
     documento = fields.Char(string='Documento', required=False)
@@ -12,8 +13,9 @@ class MovimentoNostro(models.Model):
     data_conta = fields.Date(string='Data Contabilistica', required=True)
     movimento = fields.Char(string='Movimento', required=True)
     # balance = fields.Float(string='Saldo', required=True)
-    saldo = fields.Float(string='Saldo', required=True)
+    saldo = fields.Float(string='Montante', required=True)
     conta_id = fields.Many2one('account.account', string='Conta', required=False)
+    movimento_vostro_id = fields.Many2one('movimento_vostro.movimento_vostro', string='Vostro', required=False)
     status = fields.Selection([
         ('ativo', 'Ativo'),
         ('inativo', 'Inativo'),

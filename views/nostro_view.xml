@@ -93,10 +93,10 @@
     <menuitem id="menu_account" name="Accounting" sequence="10"/>
     
     <!-- Nostro Menu -->
-    <menuitem id="menu_nostro"
+    <!-- <menuitem id="menu_nostro"
         name="Nostro" 
         parent="menu_account"
         action="action_nostro"
-        sequence="10"/>
+        sequence="10"/> -->
 
 </odoo>
