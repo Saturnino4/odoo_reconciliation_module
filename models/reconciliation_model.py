@@ -6,16 +6,16 @@ class Reconciliation(models.Model):
     _description = 'Reconciliation'
 
     name = fields.Char(string='Nome', compute='_compute_name', store=True)
-    date_start = fields.Date(string='Data Inicio', required=True)
+    date_start = fields.Date(string='Data Inicio', required=True, default=fields.Date.context_today)
     # date_end = fields.Date(string='Data Fim', required=True)
     date_end = fields.Date(string='Data Fim', required=True, default=fields.Date.context_today)
     description = fields.Text(string='Descrição')
     day_offset = fields.Integer(string='Desfasamento (dias)', default=0)
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('confirmed', 'Confirmed'),
-        ('checked', 'Checked'),
-        ('approved', 'Approved'),
+        ('confirmed', 'Confirmado'),
+        ('checked', 'Conferido'),
+        ('approved', 'Aprovado'),
     ], string='Estado', default='draft', required=True)
 
     conta1_id = fields.Many2one('account.account',

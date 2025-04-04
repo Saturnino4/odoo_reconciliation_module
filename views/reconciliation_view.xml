@@ -57,7 +57,7 @@
                         <!-- <button name="action_confirm" string="Confirmar" type="object" class="oe_highlight"/> -->
                         <!-- <button name="action_check" string="Checked" type="object" class="oe_highlight"/> -->
 
-                        <field name="state" widget="statusbar"/>
+                        <!-- <field name="state" widget="statusbar"/> -->
                     </header>
                     <sheet>
                         <group>
@@ -65,15 +65,16 @@
                                 <!-- Novos campos para seleção de contas -->
                                 <field name="conta1_id" placeholder="Selecione uma conta"/>
                                 <field name="conta2_id" placeholder="Selecione a conta correspondete"/>
+                                <field name="state" readonly="1" options="{'no_open': True}"/>
                             </group>
                             <group>
                                 <field name="name" readonly="1"/>
-                                <field name="date_start"/>
-                                <field name="date_end"/>
-                                <field name="write_date" readonly="1"/>
-                                <field name="create_date" readonly="1"/>
-                                <field name="write_uid" readonly="1"/>
-                                <field name="day_offset"/>
+                                <field name="date_start" invisible="1" options="{'no_open': True}"/>
+                                <field name="date_end" invisible="1" options="{'no_open': True}"/>
+                                <field name="write_date" readonly="1" invisible="1" options="{'no_open': True}"/>
+                                <field name="create_date" readonly="1" invisible="1" options="{'no_open': True}"/>
+                                <field name="write_uid" readonly="1" invisible="1" options="{'no_open': True}"/>
+                                <field name="day_offset" invisible="1" options="{'no_open': True}"/>
                             </group>
                         </group>
                         <notebook>
@@ -82,12 +83,12 @@
                                 <field name="swift_ids">
                                     <tree>
                                         <field name="code"/>
-                                        <field name="reference"/>
-                                        <field name="value"/>
                                         <field name="date"/>
+                                        <field name="value"/>
+                                        <field name="reference"/>
                                         <field name="ma"/>
                                         <field name="amount"/>
-                                        <field name="status"/>
+                                        <!-- <field name="status"/> -->
                                     </tree>
                                 </field>
                             </page>
@@ -96,27 +97,44 @@
                             <!-- Lista de Nostro Accounts filtrada pela conta selecionada em conta2_id -->
                             <page string="Registros de Nostro">
                                 <field name="nostro_ids">
-                                    <!-- <tree>
-                                        <field name="name"/>
+                                    <tree>
+                                        <field name="documento"/>
+                                        <field name="data_emissao"/>
+                                        <field name="data_conta"/>
                                         <field name="reference"/>
+                                        <!-- <field name="conta_id"/> -->
+                                        <field name="saldo"/>
+                                        <!-- <field name="status"/> -->
+                                        <!-- outros campos conforme o modelo account_nostro.account_nostro -->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <!-- <group>
+                            <group>
+                                <field name="swift_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="code"/>
+                                        <field name="reference"/>
+                                        <field name="value"/>
                                         <field name="date"/>
-                                        <field name="account_number"/>
-                                        <field name="bank_name"/>
-                                        <field name="currency"/>
-                                        <field name="balance"/>
-                                    </tree> -->
+                                        <field name="ma"/>
+                                        <field name="amount"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                               <field name="nostro_ids"  nolabel="1" readonly="1">
                                     <tree>
                                         <field name="documento"/>
                                         <field name="data_conta"/>
                                         <field name="reference"/>
                                         <field name="conta_id"/>
                                         <field name="saldo"/>
-                                        <field name="status"/>
-                                        <!-- outros campos conforme o modelo account_nostro.account_nostro -->
                                     </tree>
                                 </field>
-                            </page>
-                        </notebook>
+                            </group>
+                        </group> -->
                         
                     </sheet>
                 </form>
